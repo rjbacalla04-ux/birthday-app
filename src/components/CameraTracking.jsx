@@ -11,7 +11,6 @@ const CameraTracking = ({ onFingerMove }) => {
   const lastVideoTimeRef = useRef(-1); 
   const runningMode = "VIDEO";
 
-  // Na-fix ang 'use-before-define' sa pamamagitan ng pag-wrap sa useCallback
   const startWebcam = useCallback(async (predictLoopFunction) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -28,7 +27,6 @@ const CameraTracking = ({ onFingerMove }) => {
   }, []);
 
   useEffect(() => {
-    // Ginawang local para sa ligtas na cleanup closure
     let activeStream = null;
 
     const predictLoop = async () => {
@@ -58,7 +56,7 @@ const CameraTracking = ({ onFingerMove }) => {
           }
 
           context.beginPath();
-          context.arc(screenX, screenY, 8, 0, 2 * Math.PI);
+          context.arc(screenX, screenY, 6, 0, 2 * Math.PI);
           context.fillStyle = "#3b82f6"; 
           context.fill();
         }
@@ -98,20 +96,19 @@ const CameraTracking = ({ onFingerMove }) => {
 
     initMediaPipe();
 
-    // Safe Cleanup gamit ang local variable closure
     return () => {
       if (activeStream) {
         activeStream.getTracks().forEach(track => track.stop());
       }
     };
-  }, [onFingerMove, startWebcam]); // Kompleto ang dependencies ngayon
+  }, [onFingerMove, startWebcam]);
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-slate-950">
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 text-white z-20">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-          <p className="text-xs font-mono text-gray-400">Loading Google AI Model...</p>
+          <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+          <p className="text-[10px] font-mono text-gray-400">Loading AI Tracking...</p>
         </div>
       )}
 
@@ -126,7 +123,7 @@ const CameraTracking = ({ onFingerMove }) => {
         autoPlay
         playsInline
         muted
-        className="absolute w-full h-full object-cover scale-x-[-1] opacity-30"
+        className="absolute w-full h-full object-cover scale-x-[-1] opacity-40"
       />
 
       <canvas
