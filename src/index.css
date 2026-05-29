@@ -1,0 +1,14 @@
+/* Unahin ang mga @import statements sa pinakatuktok */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #f9f6ee; /* Aesthetic Warm Beige / Cream */
+    image-rendering: pixelated;
+  }
+}
+
+.font-pixel {
+  font-family: 'VT323', monospace;
+}
