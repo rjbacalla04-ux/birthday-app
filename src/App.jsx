@@ -9,8 +9,8 @@ export default function App() {
   // MGA CONFIGURATION (Dito lang natin binawasan ang Y para umakyat ang zone)
   const targetXMin = 42;
   const targetXMax = 58;
-  const targetYMin = 50; // Mula sa dating nasa body, itinaas natin dito para sa kandila
-  const targetYMax = 70; // Sakop hanggang sa mitsa ng kandila
+  const targetYMin = 70; // Mula sa dating nasa body, itinaas natin dito para sa kandila
+  const targetYMax = 74; // Sakop hanggang sa mitsa ng kandila
 
   const handleFingerMove = useCallback((data) => {
     const percentX = (data.x / data.canvasWidth) * 100;
