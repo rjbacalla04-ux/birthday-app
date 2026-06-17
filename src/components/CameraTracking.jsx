@@ -42,6 +42,8 @@ const CameraTracking = ({ onFingerMove }) => {
         lastVideoTimeRef.current = video.currentTime;
         
         const results = handLandmarkerRef.current.detectForVideo(video, startTimeMs);
+        
+        // Linisin ang canvas frame
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         if (results.landmarks && results.landmarks.length > 0) {
@@ -55,10 +57,7 @@ const CameraTracking = ({ onFingerMove }) => {
             onFingerMove({ x: screenX, y: screenY, canvasWidth: canvas.width, canvasHeight: canvas.height });
           }
 
-          context.beginPath();
-          context.arc(screenX, screenY, 6, 0, 2 * Math.PI);
-          context.fillStyle = "#3b82f6"; 
-          context.fill();
+          /* ❌ TINANGGAL DITO YUNG CONTEXT.ARC AT DRAWING UTILS PARA MAWALA ANG NAKALUTANG NA CROSS/DOT */
         }
       }
 
@@ -104,7 +103,7 @@ const CameraTracking = ({ onFingerMove }) => {
   }, [onFingerMove, startWebcam]);
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-slate-950">
+    <div className="relative w-full h-full flex items-center justify-center bg-transparent">
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 text-white z-20">
           <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
@@ -123,14 +122,14 @@ const CameraTracking = ({ onFingerMove }) => {
         autoPlay
         playsInline
         muted
-        className="absolute w-full h-full object-cover scale-x-[-1] opacity-40"
+        className="absolute w-full h-full object-cover scale-x-[-1] opacity-100"
       />
 
       <canvas
         ref={canvasRef}
         width={640}
         height={480}
-        className="absolute w-full h-full object-cover z-10"
+        className="absolute w-full h-full object-cover z-10 pointer-events-none"
       />
     </div>
   );

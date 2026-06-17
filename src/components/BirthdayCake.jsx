@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-const BirthdayCake = ({ isLit, setIsLit }) => {
+const BirthdayCake = ({ isLit, setIsLit, isBlown, setIsBlown }) => {
   const [volume, setVolume] = useState(0);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -25,15 +25,16 @@ const BirthdayCake = ({ isLit, setIsLit }) => {
 
       const blowThreshold = 65; 
 
-      if (averageVolume > blowThreshold) {
+      if (averageVolume > blowThreshold && isLit && !isBlown) {
         setIsLit(false); 
+        if (setIsBlown) setIsBlown(true); 
       }
 
       requestAnimationFrame(update);
     };
 
     update();
-  }, [setIsLit]);
+  }, [setIsLit, isLit, isBlown, setIsBlown]);
 
   const initAudio = useCallback(async () => {
     try {
@@ -89,7 +90,7 @@ const BirthdayCake = ({ isLit, setIsLit }) => {
             <div key={i} className="flex flex-col items-center w-2 relative">
               
               {/* Pixelated Flame Animation */}
-              {isLit ? (
+              {isLit && (
                 <div 
                   className="w-1.5 h-3 bg-[#f57373] relative -bottom-[1px] animate-pulse flex items-center justify-center"
                   style={{ 
@@ -99,13 +100,11 @@ const BirthdayCake = ({ isLit, setIsLit }) => {
                 >
                   <div className="w-[2px] h-1.5 bg-[#fff7d6]"></div>
                 </div>
-              ) : (
-                /* Puff Smoke Effect kapag patay ang kandila */
-                <div className="w-1 h-1 bg-slate-400/30 animate-ping absolute -top-1"></div>
               )}
 
               {/* Shaded Candle Body */}
               <div className="w-[6px] h-6 bg-[#fff7d6] border-l border-[#ffffff] border-r border-[#e9ddad] relative">
+                {/* 🧵 MITSA / WICK (Laging present pero walang lumilipad na cross/smoke kapag patay) */}
                 <div className="w-[2px] h-[3px] bg-slate-500 absolute -top-[3px] left-[1px]"></div>
                 <div className="w-full h-[2px] bg-[#f57373]/70 absolute top-1.5"></div>
                 <div className="w-full h-[2px] bg-[#f57373]/70 absolute top-3.5"></div>
@@ -153,8 +152,6 @@ const BirthdayCake = ({ isLit, setIsLit }) => {
         </div>
 
       </div>
-
-      {/* TENTANGGAL NA YUNG BUTTON DITO PARA MINIMALIST AT PURE AIR CONTROL LANG */}
     </div>
   );
 };

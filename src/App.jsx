@@ -1,85 +1,151 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import BirthdayCake from './components/BirthdayCake.jsx';
 import CameraTracking from './components/CameraTracking.jsx';
+import confetti from 'canvas-confetti';
 
 export default function App() {
   const [fingerPos, setFingerPos] = useState({ x: 50, y: 40 });
   const [isLit, setIsLit] = useState(false);
+  const [isBlown, setIsBlown] = useState(false); 
+  const [showLetter, setShowLetter] = useState(false); 
 
-  // MGA CONFIGURATION (Dito lang natin binawasan ang Y para umakyat ang zone)
   const targetXMin = 42;
   const targetXMax = 58;
-  const targetYMin = 70; // Mula sa dating nasa body, itinaas natin dito para sa kandila
-  const targetYMax = 74; // Sakop hanggang sa mitsa ng kandila
+  const targetYMin = 70; 
+  const targetYMax = 74; 
 
   const handleFingerMove = useCallback((data) => {
+    if (isBlown) return; 
+
     const percentX = (data.x / data.canvasWidth) * 100;
     const percentY = (data.y / data.canvasHeight) * 100 * 1.5; 
     
     setFingerPos({ x: percentX, y: percentY });
 
-    // Saktong collision detector para sa tapat ng mga kandila
     if (percentX > targetXMin && percentX < targetXMax && percentY > targetYMin && percentY < targetYMax) {
       setIsLit(true);
     }
-  }, []);
+  }, [isBlown]);
+
+  useEffect(() => {
+    if (isBlown) {
+      confetti({
+        particleCount: 150,
+        spread: 85,
+        origin: { y: 0.6 }
+      });
+
+      const duration = 3000;
+      const animationEnd = Date.now() + duration;
+
+      const frameInterval = setInterval(() => {
+        if (Date.now() > animationEnd) return clearInterval(frameInterval);
+        confetti({ particleCount: 30, angle: 60, spread: 60, origin: { x: 0, y: 0.8 } });
+        confetti({ particleCount: 30, angle: 120, spread: 60, origin: { x: 1, y: 0.8 } });
+      }, 400);
+
+      const timer = setTimeout(() => {
+        clearInterval(frameInterval);
+        setShowLetter(true); 
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+        clearInterval(frameInterval);
+      };
+    }
+  }, [isBlown]);
+
+  if (showLetter) {
+    return (
+      <div className="w-full min-h-screen bg-[#1c140e] flex items-center justify-center p-4 md:p-8 overflow-y-auto animate-fade-in">
+        <div 
+          className="w-full max-w-xl aspect-[3/4] md:aspect-[4/5] bg-contain bg-no-repeat bg-center p-12 md:p-24 flex flex-col items-center justify-center relative drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)] animate-scroll-up"
+          style={{ backgroundImage: "url('/image_a3d725.jpg')" }}
+        >
+          <div className="w-full max-h-[75%] overflow-y-auto pr-2 custom-scroll text-center flex flex-col items-center">
+            <h2 className="text-xl md:text-2xl font-serif text-[#4a2e12] font-black tracking-wide mb-4 uppercase border-b-2 border-[#4a2e12]/20 pb-1">
+              📜 Liham ng Pasasalamat
+            </h2>
+
+            <div className="space-y-4 text-xs md:text-sm font-serif text-[#3a220b] leading-relaxed italic font-semibold text-justify">
+              <p className="font-bold text-left not-italic text-[#241304]">Dear Allyssa,</p>
+              <p>   
+                Isang mapagpalang kaarawan po sa inyo! Ang liham na ito ay patunay ng aking taos-pusong pasasalamat sa inyong walang sawang paggabay, tiwala, at suporta sa akin sa aking backend development journey.
+              </p>
+              <p>
+                Ang inyong malawak na karanasan sa industriya ay nagsisilbing malaking inspirasyon sa akin araw-araw upang magsumikap at maging mahusay na developer. Mapalad po ako na maging mentee ninyo.
+              </p>
+              <p>
+                Sana po ay nagustuhan ninyo ang simpleng sorpresang ito na binuo ko para sa inyong espesyal na araw gamit ang React, MediaPipe Tracking, at AI integration. Nawa'y bigyan pa kayo ng mahabang buhay, mabuting kalusugan, at marami pang tagumpay sa negosyo!
+              </p>
+              <p className="pt-4 font-bold text-right not-italic text-[#241304]">
+                Gumagalang at nagpapasalamat,<br />
+                <span className="text-base font-black text-[#4a2e12] not-italic block mt-1">RJ L. Bacalla</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes scrollUp { from { transform: translateY(40px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+          .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+          .animate-scroll-up { animation: scrollUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+          .custom-scroll::-webkit-scrollbar { width: 4px; }
+          .custom-scroll::-webkit-scrollbar-thumb { background: #4a2e12; border-radius: 10px; }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full min-h-screen bg-[#f9f6ee] flex flex-col items-center p-4 select-none font-sans overflow-y-auto">
-      
-      {/* HEADER */}
+    /* ✨ FIX: Idinagdag ang cursor-none para piliting itago ang operating system cursor / crosshair */
+    <div className="w-full min-h-screen bg-[#f9f6ee] flex flex-col items-center p-4 select-none font-sans overflow-y-auto cursor-none">
       <header className="text-center mt-8 mb-6">
         <h1 className="text-5xl md:text-6xl font-normal text-[#2b4c7e] tracking-wider font-pixel drop-shadow-[2px_2px_0px_rgba(0,32,176,0.1)]">
           Happy Birthday!
         </h1>
       </header>
 
-      <div className="w-full max-w-md bg-transparent flex flex-col items-center relative my-auto">
-        
-        {/* UPPER: CAMERA PANEL */}
+      {/* ✨ FIX: Nilagyan din dito ng cursor-none para sigurado sa active tracking box */}
+      <div className="w-full max-w-md bg-transparent flex flex-col items-center relative my-auto cursor-none">
         <div className="w-full aspect-[4/3] bg-slate-950 rounded-t-2xl overflow-hidden relative shadow-md border-t-2 border-x-2 border-[#fffdf9]/20 z-10">
           <CameraTracking onFingerMove={handleFingerMove} />
         </div>
 
-        {/* LOWER: CAKE STAGE */}
         <div className="w-full bg-[#fcfbfe] rounded-b-2xl shadow-md border-b-2 border-x-2 border-slate-100 relative flex flex-col items-center justify-end pt-12 pb-0 min-h-[180px] z-10 overflow-hidden">
-          
-          {/* Detailed Pixel Cake */}
           <div className="z-20 translate-y-[8px]">
-            <BirthdayCake isLit={isLit} setIsLit={setIsLit} />
+            <BirthdayCake isLit={isLit} setIsLit={setIsLit} isBlown={isBlown} setIsBlown={setIsBlown} />
           </div>
-
-          {/* Solid Blue Table Base */}
           <div className="w-full h-14 bg-[#0020b0] z-10 shadow-lg"></div>
         </div>
 
-        {/* FLOATING GIPHY MATCHSTICK */}
-        <div 
-          className="absolute pointer-events-none z-50 transition-all duration-75 ease-out"
-          style={{ 
-            left: `${fingerPos.x}%`, 
-            top: `${fingerPos.y}%`,
-            transform: 'translate(-50%, -15%)',
-            imageRendering: 'pixelated'
-          }}
-        >
-          <img 
-            src="https://media.giphy.com/media/IKxGXoVnzc82wuvIyT/giphy.gif" 
-            alt="Pixel Lit Match" 
-            className="w-12 h-12 object-contain filter drop-shadow-[0_2px_4px_rgba(251,146,60,0.4)]"
-          />
-        </div>
-
+        {!isBlown && (
+          <div 
+            className="absolute pointer-events-none z-50 transition-all duration-75 ease-out"
+            style={{ 
+              left: `${fingerPos.x}%`, 
+              top: `${fingerPos.y}%`,
+              transform: 'translate(-50%, -15%)',
+              imageRendering: 'pixelated'
+            }}
+          >
+            <img 
+              src="https://media.giphy.com/media/IKxGXoVnzc82wuvIyT/giphy.gif" 
+              alt="Pixel Lit Match" 
+              className="w-12 h-12 object-contain filter drop-shadow-[0_2px_4px_rgba(251,146,60,0.4)]"
+            />
+          </div>
+        )}
       </div>
 
-      {/* FOOTER */}
       <footer className="text-center mt-8 mb-6 max-w-sm">
         <p className="text-xs md:text-sm text-slate-400 font-medium tracking-wide leading-relaxed">
           Use your hands to light the cake,<br />
           <span className="text-[#0020b0]/60 font-semibold">then blow out the candles!</span>
         </p>
       </footer>
-
-    </div>
+    </div>    
   );
 }
