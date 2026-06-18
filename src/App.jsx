@@ -65,23 +65,24 @@ export default function App() {
         >
           <div className="w-full max-h-[75%] overflow-y-auto pr-2 custom-scroll text-center flex flex-col items-center">
             <h2 className="text-xl md:text-2xl font-serif text-[#4a2e12] font-black tracking-wide mb-4 uppercase border-b-2 border-[#4a2e12]/20 pb-1">
-              📜 Liham ng Pasasalamat
+              📜 A SPECIAL MESSAGE FOR YOU 
             </h2>
 
             <div className="space-y-4 text-xs md:text-sm font-serif text-[#3a220b] leading-relaxed italic font-semibold text-justify">
-              <p className="font-bold text-left not-italic text-[#241304]">Dear Allyssa,</p>
+              <p className="font-bold text-left not-italic text-[#e6ca97]/50">Dear,&nbsp; Allyssa!</p>
               <p>   
-                Isang mapagpalang kaarawan po sa inyo! Ang liham na ito ay patunay ng aking taos-pusong pasasalamat sa inyong walang sawang paggabay, tiwala, at suporta sa akin sa aking backend development journey.
-              </p>
+                This is the second time na babati ako sa birthday mo. parang kailan lang at ganto na akong babati sayo hehe. Salamat sa Panginoon, dahil blessing na magkaroon ng pagkakataon na makilala ka. Thank you din sayo, sa mga natutunan ko sa isang taon na nakakausap ka. Hindi mo siguro alam, pero may mga bagay na naituro at naipaalala mo sa akin.              </p>
               <p>
-                Ang inyong malawak na karanasan sa industriya ay nagsisilbing malaking inspirasyon sa akin araw-araw upang magsumikap at maging mahusay na developer. Mapalad po ako na maging mentee ninyo.
-              </p>
+                May the Lord always keep you safe—pag malungkot ka, pag pagod ka, or kahit pag mag isa ka. Alam ko na mahirap ang battle mo dyan pero sufficient ang Lord sa season ng buhay mo na 'to ngayon.               </p>
               <p>
-                Sana po ay nagustuhan ninyo ang simpleng sorpresang ito na binuo ko para sa inyong espesyal na araw gamit ang React, MediaPipe Tracking, at AI integration. Nawa'y bigyan pa kayo ng mahabang buhay, mabuting kalusugan, at marami pang tagumpay sa negosyo!
-              </p>
-              <p className="pt-4 font-bold text-right not-italic text-[#241304]">
-                Gumagalang at nagpapasalamat,<br />
-                <span className="text-base font-black text-[#4a2e12] not-italic block mt-1">RJ L. Bacalla</span>
+                Continue to honor God in whatever you do and love Him more deeply each day. Nawa patuloy mong makita ang faithfulness Niya sa bawat sitwasyon
+                <br /><br />  
+                 Malakas ka, Allyssa. Alam ng Panginoon kung ano ang kaya mong harapin at kung saan ka Niya dinadala.
+                Ito ang prayer ko para sa'yo sa birthday mo, na sa panibagong taon ng buhay mo, mas lalo kang mapalapit sa Panginoon at mas makilala mo pa Siya sa mas malalim na paraan.              </p>
+              <p>God bless you, Allyssa. Enjoy your day, and praise God for another year of His faithfulness in your life! ❤︎ˎˊ˗ </p>
+              <p className="pt-4 font-bold text-right not-italic  text-[#e6ca97]/50">
+                Warmest regards,<br />
+                <span className="text-base font-black text-[#4a2e12] not-italic block mt-1">RJ</span>
               </p>
             </div>
           </div>
@@ -101,7 +102,7 @@ export default function App() {
 
   return (
     /* ✨ FIX: Idinagdag ang cursor-none para piliting itago ang operating system cursor / crosshair */
-    <div className="w-full min-h-screen bg-[#f9f6ee] flex flex-col items-center p-4 select-none font-sans overflow-y-auto cursor-none">
+    <div className="w-full min-h-screen bg-[#f9f6ee] flex flex-col items-center p-4 select-none font-sans overflow-y-auto">
       <header className="text-center mt-8 mb-6">
         <h1 className="text-5xl md:text-6xl font-normal text-[#2b4c7e] tracking-wider font-pixel drop-shadow-[2px_2px_0px_rgba(0,32,176,0.1)]">
           Happy Birthday!
@@ -109,7 +110,7 @@ export default function App() {
       </header>
 
       {/* ✨ FIX: Nilagyan din dito ng cursor-none para sigurado sa active tracking box */}
-      <div className="w-full max-w-md bg-transparent flex flex-col items-center relative my-auto cursor-none">
+      <div className="w-full max-w-md bg-transparent flex flex-col items-center relative my-auto">
         <div className="w-full aspect-[4/3] bg-slate-950 rounded-t-2xl overflow-hidden relative shadow-md border-t-2 border-x-2 border-[#fffdf9]/20 z-10">
           <CameraTracking onFingerMove={handleFingerMove} />
         </div>
